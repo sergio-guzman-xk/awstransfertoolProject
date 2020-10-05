@@ -331,7 +331,7 @@ Get-Content -Path lss3.txt |
 
     End Sub
 
-    '## controls the availability of the aws estination boxes ##
+    '## controls the availability of the aws destination boxes ##
     Private Sub awsFlag_CheckedChanged(sender As Object, e As EventArgs) Handles awsFlag.CheckedChanged
         If awsFlag.CheckState = 1 Then
             redFlag = False
