@@ -55,14 +55,14 @@ Partial Class BbAWSControl
         '
         Me.btnGetList.Location = New System.Drawing.Point(656, 32)
         Me.btnGetList.Name = "btnGetList"
-        Me.btnGetList.Size = New System.Drawing.Size(75, 23)
+        Me.btnGetList.Size = New System.Drawing.Size(107, 23)
         Me.btnGetList.TabIndex = 3
-        Me.btnGetList.Text = "Get S3 List"
+        Me.btnGetList.Text = "Save Configuration"
         Me.btnGetList.UseVisualStyleBackColor = True
         '
         'btnDownload
         '
-        Me.btnDownload.Location = New System.Drawing.Point(1132, 32)
+        Me.btnDownload.Location = New System.Drawing.Point(1109, 32)
         Me.btnDownload.Name = "btnDownload"
         Me.btnDownload.Size = New System.Drawing.Size(75, 23)
         Me.btnDownload.TabIndex = 4
@@ -125,7 +125,7 @@ Partial Class BbAWSControl
         '
         'btnConfig
         '
-        Me.btnConfig.Location = New System.Drawing.Point(248, 32)
+        Me.btnConfig.Location = New System.Drawing.Point(241, 32)
         Me.btnConfig.Name = "btnConfig"
         Me.btnConfig.Size = New System.Drawing.Size(115, 23)
         Me.btnConfig.TabIndex = 11
@@ -169,7 +169,7 @@ Partial Class BbAWSControl
         '
         'btnGetS3
         '
-        Me.btnGetS3.Location = New System.Drawing.Point(446, 32)
+        Me.btnGetS3.Location = New System.Drawing.Point(455, 32)
         Me.btnGetS3.Name = "btnGetS3"
         Me.btnGetS3.Size = New System.Drawing.Size(75, 23)
         Me.btnGetS3.TabIndex = 16
