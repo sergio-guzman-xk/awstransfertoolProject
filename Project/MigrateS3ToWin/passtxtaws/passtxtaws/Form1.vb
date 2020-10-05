@@ -8,7 +8,7 @@ Public Class BbAWSControl
 
     Dim redFlag As Boolean = False
 
-
+    '## Control de Save Configuration Button ##
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles btnGetList.Click
         '## creates the writter for the lss3.txt file ##
         Dim objWriteroutputaws As New StreamWriter("lss3.txt")
@@ -23,7 +23,7 @@ Public Class BbAWSControl
 
         If profile = "" Or localPath = "" Or awsPath = "" Then
             MsgBox("Invalid profile, local path or aws path", , "Error")
-
+            objWriteroutputaws.Close()
         Else
             redFlag = True
             txtOutput.AppendText("Processing... " & Environment.NewLine)
@@ -51,18 +51,29 @@ Public Class BbAWSControl
 
             '## checks if it is a local download or a S3 to S3 transfer ##
             If awsFlag.CheckState = 1 Then
-                processCreation(profile, localPath, awsPath, destinationAWS, destProfile)
+                If destProfile = "" Or destinationAWS = "" Then
+                    redFlag = False
+                    MsgBox("Invalid destination profile, or destination aws path", , "Error")
+                    txtOutput.AppendText(Environment.NewLine & "The currnet configuration could not be saved..." & Environment.NewLine)
+                Else
+                    processCreation(profile, localPath, awsPath, destinationAWS, destProfile)
+                    txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
+
+                    getList()
+
+                    runspace.Close()
+                End If
             ElseIf awsFlag.CheckState = 0 Then
                 processCreation(profile, localPath, awsPath)
-            Else
+                txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
 
+                getList()
+
+                runspace.Close()
+            Else
+                txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
             End If
 
-            txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
-
-            getList()
-
-            runspace.Close()
         End If
 
     End Sub
@@ -216,7 +227,7 @@ Get-Content -Path lss3.txt |
             txtOutput.AppendText(Environment.NewLine & "Process completed." & Environment.NewLine)
             MsgBox("Process completed", , "")
         Else
-            MessageBox.Show("Execute Get List first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Save the configuration first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
 
@@ -323,6 +334,7 @@ Get-Content -Path lss3.txt |
     '## controls the availability of the aws estination boxes ##
     Private Sub awsFlag_CheckedChanged(sender As Object, e As EventArgs) Handles awsFlag.CheckedChanged
         If awsFlag.CheckState = 1 Then
+            redFlag = False
             txtDestinationPath.Enabled = True
             txtDestinationProfile.Enabled = True
         Else
