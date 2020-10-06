@@ -11,7 +11,6 @@ Public Class BbAWSControl
     '## Control de Save Configuration Button ##
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles btnGetList.Click
         '## creates the writter for the lss3.txt file ##
-        Dim objWriteroutputaws As New StreamWriter("lss3.txt")
         Dim defaultSize = Trim(txtCantidad.Text())
         Dim profile = Trim(txtInputProfile.Text())
         Dim destProfile = Trim(txtDestinationProfile.Text())
@@ -23,31 +22,17 @@ Public Class BbAWSControl
 
         If profile = "" Or localPath = "" Or awsPath = "" Then
             MsgBox("Invalid profile, local path or aws path", , "Error")
-            objWriteroutputaws.Close()
         Else
             redFlag = True
             txtOutput.AppendText("Processing... " & Environment.NewLine)
             txtOutput.AppendText("Please Wait... " & Environment.NewLine)
 
-            Console.WriteLine("Default: " & defaultSize)
-
-            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
-            runspace.Open()
-            Dim pipeline As Pipeline = runspace.CreatePipeline()
             '## Downloads the list of items the S3 and places them in the lss3.txt file ##
             If defaultSize = "" Then
-                pipeline.Commands.AddScript("aws s3 ls --profile " & profile & " " & awsPath)
+                createLss3(profile, awsPath)
             Else
-                pipeline.Commands.AddScript("aws s3 ls --profile " & profile & " " & awsPath & " | Select -First " & defaultSize)
+                createLss3(profile, awsPath, defaultSize, defaultSize, 0, 0, True)
             End If
-            pipeline.Commands.Add("Out-String")
-            Dim results As Collection(Of PSObject) = pipeline.Invoke()
-
-
-            For Each ps As PSObject In results
-                objWriteroutputaws.WriteLine(ps.ToString())
-            Next
-            objWriteroutputaws.Close()
 
             '## checks if it is a local download or a S3 to S3 transfer ##
             If awsFlag.CheckState = 1 Then
@@ -61,20 +46,96 @@ Public Class BbAWSControl
 
                     getList()
 
-                    runspace.Close()
                 End If
             ElseIf awsFlag.CheckState = 0 Then
                 processCreation(profile, localPath, awsPath)
+
                 txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
 
                 getList()
 
-                runspace.Close()
             Else
                 txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
             End If
 
         End If
+
+    End Sub
+    '## Creates the Lss3.txt file needed for all the processes when not choosing a package size##
+    Private Sub createLss3(profile As String, awsPath As String)
+        Dim objWriteroutputaws As New StreamWriter("lss3.txt")
+        Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+        runspace.Open()
+        Dim pipeline As Pipeline = runspace.CreatePipeline()
+        pipeline.Commands.AddScript("aws s3 ls --profile " & profile & " " & awsPath)
+        pipeline.Commands.Add("Out-String")
+        Dim results As Collection(Of PSObject) = pipeline.Invoke()
+
+
+        For Each ps As PSObject In results
+            objWriteroutputaws.WriteLine(ps.ToString())
+        Next
+        objWriteroutputaws.Close()
+        runspace.Close()
+    End Sub
+
+    '## Creates the Lss3.txt file needed for all the processes when choosing a package size##
+    Private Sub createLss3(profile As String, awsPath As String, DefaultSize As String, totalSize As Double, counter As Double, lineCounter As Double, firstTime As Boolean)
+
+        Dim objWriteroutputaws As New StreamWriter("lss3.txt")
+        Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+        runspace.Open()
+        Dim pipeline As Pipeline = runspace.CreatePipeline()
+        pipeline.Commands.AddScript("aws s3 ls --profile " & profile & " " & awsPath & " | Select -First " & DefaultSize)
+        pipeline.Commands.Add("Out-String")
+        Dim results As Collection(Of PSObject) = pipeline.Invoke()
+
+
+        For Each ps As PSObject In results
+            objWriteroutputaws.WriteLine(ps.ToString())
+        Next
+        objWriteroutputaws.Close()
+
+        '## Creates a temp file to check how many lines it contains ##
+        Dim pipeline2 As Pipeline = runspace.CreatePipeline()
+        pipeline2.Commands.AddScript("Get-Content -Path lss3.txt |
+Select-String -Pattern '^(.+) (.+) (\d+) (.+)' |
+Foreach-Object {
+$one, $two, $three, $four= $_.Matches[0].Groups[1..4].Value
+[string] $four
+} | Out-File -FilePath checkfile.txt")
+        pipeline2.Commands.Add("Out-String")
+        pipeline2.Invoke()
+        '## read how many lines the tem file has ##
+        Dim countLines = File.ReadLines("checkfile.txt").Count()
+        Try
+            My.Computer.FileSystem.DeleteFile("checkfile.txt")
+        Catch ex As Exception
+            Console.WriteLine("checkfile.txt was already removed")
+        End Try
+        'Console.WriteLine("Number Of lines is: " & countLines & " " & (lineCounter + counter) & " " & totalSize & " " & DefaultSize)
+        '## makes sure that the lines in the file matches what the size request was. If not then it increses the request until it maches the size requirement ##
+        If countLines = 0 Then
+            If countLines = (lineCounter + counter) Then
+                DefaultSize += 1
+                createLss3(profile, awsPath, DefaultSize, totalSize, counter, 0, True)
+            End If
+        Else
+            If countLines < totalSize Then
+                If firstTime = True Then
+                    lineCounter = countLines
+                End If
+                '## check is a new line was added in comparison to the last time it was run ##
+                If countLines = (lineCounter + counter) Then
+                    DefaultSize += 1
+                    counter += 1
+                    createLss3(profile, awsPath, DefaultSize, totalSize, counter, lineCounter, False)
+                End If
+                '## If there are no new lines it means that we have reached the limit of files in the listed S3 thus ending the process ##
+            End If
+        End If
+
+        runspace.Close()
 
     End Sub
 
@@ -87,7 +148,7 @@ Public Class BbAWSControl
 Select-String -Pattern '^(.+) (.+) (\d+) (.+)' |
 Foreach-Object {
 $one, $two, $three, $four= $_.Matches[0].Groups[1..4].Value
-[string] ""aws s3 cp --profile " & profile & " " & awsPath & "$four " & localPath & "  --no-progress""
+[string] ""aws s3 mv --profile " & profile & " '" & awsPath & "$four' '" & localPath & "'  --no-progress""
 } | Out-File -FilePath namesfiles.txt")
         pipeline2.Commands.Add("Out-String")
         pipeline2.Invoke()
@@ -104,8 +165,8 @@ $one, $two, $three, $four= $_.Matches[0].Groups[1..4].Value
 Select-String -Pattern '^(.+) (.+) (\d+) (.+)' |
 Foreach-Object {
 $one, $two, $three, $four= $_.Matches[0].Groups[1..4].Value
-[string] ""aws s3 mv --profile " & profile & " " & awsPath & "$four " & localPath & "  --no-progress"", 
-[string] ""aws s3 mv --profile " & destProfile & " " & localPath & "$four " & destinationAWS & "  --no-progress""
+[string] ""aws s3 mv --profile " & profile & " '" & awsPath & "$four' '" & localPath & "'  --no-progress"", 
+[string] ""aws s3 mv --profile " & destProfile & " '" & localPath & "$four' " & destinationAWS & "  --no-progress""
 } | Out-File -FilePath namesfiles.txt")
         pipeline2.Commands.Add("Out-String")
         pipeline2.Invoke()
