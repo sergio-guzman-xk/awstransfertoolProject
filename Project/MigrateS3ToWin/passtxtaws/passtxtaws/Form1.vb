@@ -20,66 +20,97 @@ Public Class BbAWSControl
 
         txtOutput.Clear()
 
+        Dim proceed As Boolean
+        Dim risk As Boolean
+
         If profile = "" Or localPath = "" Or awsPath = "" Then
-            MessageBox.Show("Invalid profile, local path or aws path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Invalid profile, local path or aws path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            proceed = False
         Else
             If Directory.Exists(localPath) Then
-                redFlag = True
-                txtOutput.AppendText("Processing... " & Environment.NewLine)
-                txtOutput.AppendText("Please Wait... " & Environment.NewLine)
-
-                '## Downloads the list of items the S3 and places them in the lss3.txt file ##
-                If defaultSize = "" Then
-                    createLss3(profile, awsPath)
+                If awsPath.EndsWith("/") Then
+                    proceed = True
                 Else
-                    createLss3(profile, awsPath, defaultSize, defaultSize, 0, 0, True)
+                    proceed = False
+                    redFlag = False
+                    MessageBox.Show("Invalid AWS source path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    txtOutput.AppendText(Environment.NewLine & "The specified AWS path can't be used becuase it doesnt end with '/'..." & Environment.NewLine)
+                    txtOutput.AppendText(Environment.NewLine & "The current configuration could not be saved..." & Environment.NewLine)
                 End If
-
-                '## checks if it is a local download or a S3 to S3 transfer ##
-                If awsFlag.CheckState = 1 Then
-                    If destProfile = "" Or destinationAWS = "" Then
-                        redFlag = False
-                        MessageBox.Show("Invalid destination profile, or destination aws path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                        txtOutput.AppendText(Environment.NewLine & "The currnet configuration could not be saved..." & Environment.NewLine)
+            Else
+                If localPath.EndsWith("\") Then
+                    If awsPath.EndsWith("/") Then
+                        proceed = True
+                        risk = True
                     Else
+                        proceed = False
+                        redFlag = False
+                        MessageBox.Show("Invalid AWS source path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        txtOutput.AppendText(Environment.NewLine & "The specified AWS path can't be used becuase it doesnt end with '/'..." & Environment.NewLine)
+                        txtOutput.AppendText(Environment.NewLine & "The current configuration could not be saved..." & Environment.NewLine)
+                    End If
+                Else
+                    proceed = False
+                    redFlag = False
+                    MessageBox.Show("Invalid or not accessible local path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    txtOutput.AppendText(Environment.NewLine & "The specified folder does not exist and I can't create it becuase the path doesnt end with '\'..." & Environment.NewLine)
+                    txtOutput.AppendText(Environment.NewLine & "The current configuration could not be saved..." & Environment.NewLine)
+                End If
+            End If
+        End If
+        '## Using the total returned from getnumbers it translate the information in a more human readable format and prints it ##
+
+        If proceed = True Then
+            redFlag = True
+            txtOutput.AppendText("Processing... " & Environment.NewLine)
+            txtOutput.AppendText("Please Wait... " & Environment.NewLine)
+
+            '## Downloads the list of items the S3 and places them in the lss3.txt file ##
+            If defaultSize = "" Then
+                createLss3(profile, awsPath)
+            Else
+                createLss3(profile, awsPath, defaultSize, defaultSize, 0, 0, True)
+            End If
+
+            '## checks if it is a local download or a S3 to S3 transfer ##
+            If awsFlag.CheckState = 1 Then
+                If destProfile = "" Or destinationAWS = "" Then
+                    redFlag = False
+                    MessageBox.Show("Invalid destination profile, or destination aws path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    txtOutput.AppendText(Environment.NewLine & "The current configuration could not be saved..." & Environment.NewLine)
+                Else
+                    If destinationAWS.EndsWith("/") Then
                         processCreation(profile, localPath, awsPath, destinationAWS, destProfile)
                         txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
 
                         getList()
-
+                    Else
+                        redFlag = False
+                        MessageBox.Show("Invalid AWS destination path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        txtOutput.AppendText(Environment.NewLine & "The specified AWS path can't be used becuase it doesnt end with '/'..." & Environment.NewLine)
+                        txtOutput.AppendText(Environment.NewLine & "The current configuration could not be saved..." & Environment.NewLine)
                     End If
-                ElseIf awsFlag.CheckState = 0 Then
-                    processCreation(profile, localPath, awsPath)
-
-                    txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
-
-                    getList()
-
-                Else
-                    txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
                 End If
+            ElseIf awsFlag.CheckState = 0 Then
+                processCreation(profile, localPath, awsPath)
+
+                txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
+
+                getList()
+
             Else
-                MessageBox.Show("Invalid or not accessible local path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                redFlag = False
+                txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
             End If
 
-        End If
-        '## Using the total returned from getnumbers it translate the information in a more human readable format and prints it ##
-        If redFlag Then
-
-            Dim total As Double = getNumbers()
-
-            If total < Math.Pow(1024, 2) Then
-                total = total / 1024
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " KB.")
-            ElseIf total < Math.Pow(1024, 3) Then
-                total = total / Math.Pow(1024, 2)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " MB.")
-            ElseIf total < Math.Pow(1024, 4) Then
-                total = total / Math.Pow(1024, 3)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " GB.")
-            Else
-                total = total / Math.Pow(1024, 4)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " TB.")
+            If redFlag Then
+                getNumbers()
+                If risk Then
+                    txtOutput.AppendText(Environment.NewLine & Environment.NewLine & "The specified folder does not exist. I will create it once the process is started..." & Environment.NewLine)
+                    txtOutput.AppendText(Environment.NewLine & Environment.NewLine & "Configuration saved...")
+                Else
+                    txtOutput.AppendText(Environment.NewLine & Environment.NewLine & "Configuration saved...")
+                End If
             End If
 
         End If
@@ -230,12 +261,11 @@ Get-Content -Path lss3.txt |
     End Sub
 
     '## Takes the data from the lss3.txt file and isolates the size of the files to sum them. Returns that sum ##
-    Private Function getNumbers()
+    Private Sub getNumbers()
         Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
         runspace.Open()
         Dim sizeInBt As String
         Dim testList As New ArrayList()
-
         Dim pipeline4 As Pipeline = runspace.CreatePipeline()
         pipeline4.Commands.AddScript("Get-Content -Path lss3.txt |
 	Select-String -Pattern '^(.+) (\d+) (.+)' |
@@ -273,8 +303,20 @@ Get-Content -Path lss3.txt |
             total = CDbl(Val(number)) + total
         Next
 
-        Return total
-    End Function
+        If total < Math.Pow(1024, 2) Then
+            total = total / 1024
+            txtOutput.AppendText(Environment.NewLine & "The total size of this package is: " & total.ToString & " KB." & Environment.NewLine)
+        ElseIf total < Math.Pow(1024, 3) Then
+            total = total / Math.Pow(1024, 2)
+            txtOutput.AppendText(Environment.NewLine & "The total size of this package is: " & total.ToString & " MB." & Environment.NewLine)
+        ElseIf total < Math.Pow(1024, 4) Then
+            total = total / Math.Pow(1024, 3)
+            txtOutput.AppendText(Environment.NewLine & "The total size of this package is: " & total.ToString & " GB." & Environment.NewLine)
+        Else
+            total = total / Math.Pow(1024, 4)
+            txtOutput.AppendText(Environment.NewLine & "The total size of this package is: " & total.ToString & " TB." & Environment.NewLine)
+        End If
+    End Sub
 
     '## Starts the download to local or transfer from S3 to S3 process. it uses the data in the namesfiles.txt created in the procesCreation method ##
     Private Sub Ejecutar_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
@@ -323,7 +365,7 @@ Get-Content -Path lss3.txt |
             txtOutput.AppendText(Environment.NewLine & "Process completed." & Environment.NewLine)
             MsgBox("Process completed", , "")
         Else
-            MessageBox.Show("Save the configuration first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Save the configuration first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
 
@@ -347,7 +389,7 @@ Get-Content -Path lss3.txt |
         Dim awsPath = txtAwsPath.Text()
         txtOutput.Clear()
         If String.IsNullOrEmpty(profile) Or String.IsNullOrEmpty(awsPath) Then
-            MessageBox.Show("Profile and AWS source path are required", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Profile and AWS source path are required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
             txtOutput.AppendText(Environment.NewLine & "Processing..." & Environment.NewLine & Environment.NewLine & "Getting number of files and their size at the specified s3 location...." & Environment.NewLine)
 
@@ -414,11 +456,14 @@ Get-Content -Path lss3.txt |
             redFlag = False
             txtDestinationPath.Enabled = True
             txtDestinationProfile.Enabled = True
+            txtOutput.Clear()
             txtDestinationPath.BackColor = Color.White
             txtDestinationProfile.BackColor = Color.White
         Else
+            redFlag = False
             txtDestinationPath.Enabled = False
             txtDestinationProfile.Enabled = False
+            txtOutput.Clear()
             txtDestinationPath.BackColor = Color.FromArgb(209, 209, 209)
             txtDestinationProfile.BackColor = Color.FromArgb(209, 209, 209)
         End If
