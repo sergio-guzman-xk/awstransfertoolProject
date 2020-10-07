@@ -282,13 +282,10 @@ Get-Content -Path lss3.txt |
         Dim processCounter As Double = 0
         Dim totalFiles As Double
         ProgressBar1.Minimum = 0
-        If awsFlag.CheckState = 1 Then
-            totalFiles = File.ReadLines("namesfiles.txt").Count() / 2
-            ProgressBar1.Maximum = totalFiles
-        ElseIf awsFlag.CheckState = 0 Then
-            totalFiles = File.ReadLines("namesfiles.txt").Count()
-            ProgressBar1.Maximum = totalFiles
-        End If
+
+        totalFiles = File.ReadLines("namesfiles.txt").Count()
+        ProgressBar1.Maximum = totalFiles
+
 
         If redFlag Then
             Dim nameFilesReader As New StreamReader("namesfiles.txt")
@@ -379,8 +376,13 @@ Get-Content -Path lss3.txt |
 
     Private Sub Form3_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         '## removes the files created at the start ##
-        My.Computer.FileSystem.DeleteFile("lss3.txt")
-        My.Computer.FileSystem.DeleteFile("namesfiles.txt")
+        Try
+            My.Computer.FileSystem.DeleteFile("lss3.txt")
+            My.Computer.FileSystem.DeleteFile("namesfiles.txt")
+        Catch ex As Exception
+            Console.WriteLine("Files already rmeoved")
+        End Try
+
     End Sub
 
     Private Sub BbAWSControl_Load(sender As Object, e As EventArgs) Handles MyBase.Load

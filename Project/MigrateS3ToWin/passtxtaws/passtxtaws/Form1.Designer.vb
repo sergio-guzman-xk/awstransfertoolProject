@@ -244,16 +244,16 @@ Partial Class BbAWSControl
         'ProgressBar1
         '
         Me.ProgressBar1.BackColor = System.Drawing.Color.White
-        Me.ProgressBar1.Location = New System.Drawing.Point(1041, 103)
+        Me.ProgressBar1.Location = New System.Drawing.Point(1008, 100)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(204, 20)
+        Me.ProgressBar1.Size = New System.Drawing.Size(215, 20)
         Me.ProgressBar1.TabIndex = 22
         '
         'Label4
         '
         Me.Label4.AutoSize = True
         Me.Label4.ForeColor = System.Drawing.Color.LightGray
-        Me.Label4.Location = New System.Drawing.Point(1038, 87)
+        Me.Label4.Location = New System.Drawing.Point(1005, 84)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(51, 13)
         Me.Label4.TabIndex = 23
