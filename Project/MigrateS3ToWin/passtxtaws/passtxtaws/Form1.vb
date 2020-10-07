@@ -376,6 +376,8 @@ Get-Content -Path lss3.txt |
         awsFlag.Checked = False
         txtDestinationPath.Enabled = False
         txtDestinationProfile.Enabled = False
+        txtDestinationPath.BackColor = Color.FromArgb(209, 209, 209)
+        txtDestinationProfile.BackColor = Color.FromArgb(209, 209, 209)
         Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
         runspace.Open()
         Dim pipeline As Pipeline = runspace.CreatePipeline()
@@ -398,9 +400,13 @@ Get-Content -Path lss3.txt |
             redFlag = False
             txtDestinationPath.Enabled = True
             txtDestinationProfile.Enabled = True
+            txtDestinationPath.BackColor = Color.White
+            txtDestinationProfile.BackColor = Color.White
         Else
             txtDestinationPath.Enabled = False
             txtDestinationProfile.Enabled = False
+            txtDestinationPath.BackColor = Color.FromArgb(209, 209, 209)
+            txtDestinationProfile.BackColor = Color.FromArgb(209, 209, 209)
         End If
     End Sub
 End Class

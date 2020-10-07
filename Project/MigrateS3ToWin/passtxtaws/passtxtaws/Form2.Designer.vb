@@ -35,6 +35,7 @@ Partial Class configPanel
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.LightGray
         Me.Label1.Location = New System.Drawing.Point(134, 121)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(105, 13)
@@ -43,6 +44,7 @@ Partial Class configPanel
         '
         'accessKeyTxt
         '
+        Me.accessKeyTxt.BackColor = System.Drawing.Color.White
         Me.accessKeyTxt.Location = New System.Drawing.Point(302, 118)
         Me.accessKeyTxt.Name = "accessKeyTxt"
         Me.accessKeyTxt.Size = New System.Drawing.Size(353, 20)
@@ -50,6 +52,7 @@ Partial Class configPanel
         '
         'secretAccessTxt
         '
+        Me.secretAccessTxt.BackColor = System.Drawing.Color.White
         Me.secretAccessTxt.Location = New System.Drawing.Point(303, 180)
         Me.secretAccessTxt.Name = "secretAccessTxt"
         Me.secretAccessTxt.Size = New System.Drawing.Size(353, 20)
@@ -58,6 +61,7 @@ Partial Class configPanel
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.ForeColor = System.Drawing.Color.LightGray
         Me.Label2.Location = New System.Drawing.Point(135, 183)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(104, 13)
@@ -66,24 +70,31 @@ Partial Class configPanel
         '
         'btnCancel
         '
+        Me.btnCancel.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnCancel.ForeColor = System.Drawing.Color.DarkGray
         Me.btnCancel.Location = New System.Drawing.Point(189, 250)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(90, 39)
         Me.btnCancel.TabIndex = 8
         Me.btnCancel.Text = "Cancel"
-        Me.btnCancel.UseVisualStyleBackColor = True
+        Me.btnCancel.UseVisualStyleBackColor = False
         '
         'btnCreate
         '
+        Me.btnCreate.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnCreate.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnCreate.ForeColor = System.Drawing.Color.DarkGray
         Me.btnCreate.Location = New System.Drawing.Point(525, 250)
         Me.btnCreate.Name = "btnCreate"
         Me.btnCreate.Size = New System.Drawing.Size(90, 39)
         Me.btnCreate.TabIndex = 9
         Me.btnCreate.Text = "Create"
-        Me.btnCreate.UseVisualStyleBackColor = True
+        Me.btnCreate.UseVisualStyleBackColor = False
         '
         'profileNameTxt
         '
+        Me.profileNameTxt.BackColor = System.Drawing.Color.White
         Me.profileNameTxt.Location = New System.Drawing.Point(303, 62)
         Me.profileNameTxt.Name = "profileNameTxt"
         Me.profileNameTxt.Size = New System.Drawing.Size(353, 20)
@@ -92,6 +103,7 @@ Partial Class configPanel
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.ForeColor = System.Drawing.Color.LightGray
         Me.Label5.Location = New System.Drawing.Point(135, 65)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(67, 13)
@@ -102,6 +114,7 @@ Partial Class configPanel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(790, 341)
         Me.Controls.Add(Me.profileNameTxt)
         Me.Controls.Add(Me.Label5)

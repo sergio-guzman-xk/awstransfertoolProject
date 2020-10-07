@@ -46,6 +46,7 @@ Partial Class BbAWSControl
         '
         'txtCantidad
         '
+        Me.txtCantidad.BackColor = System.Drawing.Color.White
         Me.txtCantidad.Location = New System.Drawing.Point(35, 98)
         Me.txtCantidad.Name = "txtCantidad"
         Me.txtCantidad.Size = New System.Drawing.Size(178, 20)
@@ -53,21 +54,27 @@ Partial Class BbAWSControl
         '
         'btnGetList
         '
-        Me.btnGetList.Location = New System.Drawing.Point(656, 32)
+        Me.btnGetList.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnGetList.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnGetList.ForeColor = System.Drawing.Color.DarkGray
+        Me.btnGetList.Location = New System.Drawing.Point(668, 32)
         Me.btnGetList.Name = "btnGetList"
         Me.btnGetList.Size = New System.Drawing.Size(107, 23)
         Me.btnGetList.TabIndex = 3
         Me.btnGetList.Text = "Save Configuration"
-        Me.btnGetList.UseVisualStyleBackColor = True
+        Me.btnGetList.UseVisualStyleBackColor = False
         '
         'btnDownload
         '
-        Me.btnDownload.Location = New System.Drawing.Point(1109, 32)
+        Me.btnDownload.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnDownload.ForeColor = System.Drawing.Color.DarkGray
+        Me.btnDownload.Location = New System.Drawing.Point(1127, 32)
         Me.btnDownload.Name = "btnDownload"
         Me.btnDownload.Size = New System.Drawing.Size(75, 23)
         Me.btnDownload.TabIndex = 4
         Me.btnDownload.Text = "Start"
-        Me.btnDownload.UseVisualStyleBackColor = True
+        Me.btnDownload.UseVisualStyleBackColor = False
         '
         'txtOutput
         '
@@ -84,6 +91,7 @@ Partial Class BbAWSControl
         '
         'txtInputProfile
         '
+        Me.txtInputProfile.BackColor = System.Drawing.Color.White
         Me.txtInputProfile.Location = New System.Drawing.Point(338, 103)
         Me.txtInputProfile.Name = "txtInputProfile"
         Me.txtInputProfile.Size = New System.Drawing.Size(178, 20)
@@ -92,6 +100,7 @@ Partial Class BbAWSControl
         'lbTamanoPaquete
         '
         Me.lbTamanoPaquete.AutoSize = True
+        Me.lbTamanoPaquete.ForeColor = System.Drawing.Color.LightGray
         Me.lbTamanoPaquete.Location = New System.Drawing.Point(33, 78)
         Me.lbTamanoPaquete.Name = "lbTamanoPaquete"
         Me.lbTamanoPaquete.Size = New System.Drawing.Size(76, 13)
@@ -101,6 +110,7 @@ Partial Class BbAWSControl
         'lbProfile
         '
         Me.lbProfile.AutoSize = True
+        Me.lbProfile.ForeColor = System.Drawing.Color.LightGray
         Me.lbProfile.Location = New System.Drawing.Point(338, 87)
         Me.lbProfile.Name = "lbProfile"
         Me.lbProfile.Size = New System.Drawing.Size(69, 13)
@@ -109,7 +119,8 @@ Partial Class BbAWSControl
         '
         'txtLocalPath
         '
-        Me.txtLocalPath.Location = New System.Drawing.Point(36, 154)
+        Me.txtLocalPath.BackColor = System.Drawing.Color.White
+        Me.txtLocalPath.Location = New System.Drawing.Point(35, 154)
         Me.txtLocalPath.Name = "txtLocalPath"
         Me.txtLocalPath.Size = New System.Drawing.Size(237, 20)
         Me.txtLocalPath.TabIndex = 9
@@ -117,6 +128,7 @@ Partial Class BbAWSControl
         'lbRutaDeDestino
         '
         Me.lbRutaDeDestino.AutoSize = True
+        Me.lbRutaDeDestino.ForeColor = System.Drawing.Color.LightGray
         Me.lbRutaDeDestino.Location = New System.Drawing.Point(33, 138)
         Me.lbRutaDeDestino.Name = "lbRutaDeDestino"
         Me.lbRutaDeDestino.Size = New System.Drawing.Size(140, 13)
@@ -125,35 +137,45 @@ Partial Class BbAWSControl
         '
         'btnConfig
         '
-        Me.btnConfig.Location = New System.Drawing.Point(241, 32)
+        Me.btnConfig.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnConfig.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnConfig.ForeColor = System.Drawing.Color.DarkGray
+        Me.btnConfig.Location = New System.Drawing.Point(208, 32)
         Me.btnConfig.Name = "btnConfig"
         Me.btnConfig.Size = New System.Drawing.Size(115, 23)
         Me.btnConfig.TabIndex = 11
         Me.btnConfig.Text = "AWS Profile config"
-        Me.btnConfig.UseVisualStyleBackColor = True
+        Me.btnConfig.UseVisualStyleBackColor = False
         '
         'btnEstimateSize
         '
         Me.btnEstimateSize.AutoEllipsis = True
-        Me.btnEstimateSize.Location = New System.Drawing.Point(883, 32)
+        Me.btnEstimateSize.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnEstimateSize.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnEstimateSize.ForeColor = System.Drawing.Color.DarkGray
+        Me.btnEstimateSize.Location = New System.Drawing.Point(898, 32)
         Me.btnEstimateSize.Name = "btnEstimateSize"
         Me.btnEstimateSize.Size = New System.Drawing.Size(123, 23)
         Me.btnEstimateSize.TabIndex = 12
         Me.btnEstimateSize.Text = "Estimate Packet Size"
-        Me.btnEstimateSize.UseVisualStyleBackColor = True
+        Me.btnEstimateSize.UseVisualStyleBackColor = False
         '
         'installButton
         '
-        Me.installButton.Location = New System.Drawing.Point(57, 32)
+        Me.installButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.installButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.installButton.ForeColor = System.Drawing.Color.DarkGray
+        Me.installButton.Location = New System.Drawing.Point(36, 32)
         Me.installButton.Name = "installButton"
         Me.installButton.Size = New System.Drawing.Size(75, 23)
         Me.installButton.TabIndex = 13
         Me.installButton.Text = "Check Tools"
-        Me.installButton.UseVisualStyleBackColor = True
+        Me.installButton.UseVisualStyleBackColor = False
         '
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.LightGray
         Me.Label1.Location = New System.Drawing.Point(338, 138)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(182, 13)
@@ -162,23 +184,28 @@ Partial Class BbAWSControl
         '
         'txtAwsPath
         '
-        Me.txtAwsPath.Location = New System.Drawing.Point(341, 154)
+        Me.txtAwsPath.BackColor = System.Drawing.Color.White
+        Me.txtAwsPath.Location = New System.Drawing.Point(338, 154)
         Me.txtAwsPath.Name = "txtAwsPath"
         Me.txtAwsPath.Size = New System.Drawing.Size(281, 20)
         Me.txtAwsPath.TabIndex = 14
         '
         'btnGetS3
         '
-        Me.btnGetS3.Location = New System.Drawing.Point(455, 32)
+        Me.btnGetS3.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.btnGetS3.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.btnGetS3.ForeColor = System.Drawing.Color.DarkGray
+        Me.btnGetS3.Location = New System.Drawing.Point(441, 32)
         Me.btnGetS3.Name = "btnGetS3"
         Me.btnGetS3.Size = New System.Drawing.Size(75, 23)
         Me.btnGetS3.TabIndex = 16
         Me.btnGetS3.Text = "Inspect s3"
-        Me.btnGetS3.UseVisualStyleBackColor = True
+        Me.btnGetS3.UseVisualStyleBackColor = False
         '
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.ForeColor = System.Drawing.Color.LightGray
         Me.Label2.Location = New System.Drawing.Point(668, 87)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(95, 13)
@@ -187,6 +214,8 @@ Partial Class BbAWSControl
         '
         'txtDestinationProfile
         '
+        Me.txtDestinationProfile.BackColor = System.Drawing.Color.White
+        Me.txtDestinationProfile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtDestinationProfile.Location = New System.Drawing.Point(668, 103)
         Me.txtDestinationProfile.Name = "txtDestinationProfile"
         Me.txtDestinationProfile.Size = New System.Drawing.Size(178, 20)
@@ -195,6 +224,7 @@ Partial Class BbAWSControl
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.ForeColor = System.Drawing.Color.LightGray
         Me.Label3.Location = New System.Drawing.Point(668, 138)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(201, 13)
@@ -203,7 +233,9 @@ Partial Class BbAWSControl
         '
         'txtDestinationPath
         '
-        Me.txtDestinationPath.Location = New System.Drawing.Point(671, 154)
+        Me.txtDestinationPath.BackColor = System.Drawing.Color.White
+        Me.txtDestinationPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtDestinationPath.Location = New System.Drawing.Point(668, 154)
         Me.txtDestinationPath.Name = "txtDestinationPath"
         Me.txtDestinationPath.Size = New System.Drawing.Size(281, 20)
         Me.txtDestinationPath.TabIndex = 19
@@ -211,7 +243,8 @@ Partial Class BbAWSControl
         'awsFlag
         '
         Me.awsFlag.AutoSize = True
-        Me.awsFlag.Location = New System.Drawing.Point(901, 101)
+        Me.awsFlag.ForeColor = System.Drawing.Color.LightGray
+        Me.awsFlag.Location = New System.Drawing.Point(898, 103)
         Me.awsFlag.Name = "awsFlag"
         Me.awsFlag.Size = New System.Drawing.Size(51, 17)
         Me.awsFlag.TabIndex = 21
@@ -223,6 +256,7 @@ Partial Class BbAWSControl
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1288, 601)
         Me.Controls.Add(Me.awsFlag)
         Me.Controls.Add(Me.Label3)
@@ -244,6 +278,7 @@ Partial Class BbAWSControl
         Me.Controls.Add(Me.btnDownload)
         Me.Controls.Add(Me.btnGetList)
         Me.Controls.Add(Me.txtCantidad)
+        Me.ForeColor = System.Drawing.Color.LightGray
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False

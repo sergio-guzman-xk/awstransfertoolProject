@@ -31,12 +31,15 @@ Partial Class installationWindow
         '
         'installButton
         '
+        Me.installButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.installButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.installButton.ForeColor = System.Drawing.Color.DarkGray
         Me.installButton.Location = New System.Drawing.Point(583, 286)
         Me.installButton.Name = "installButton"
         Me.installButton.Size = New System.Drawing.Size(101, 43)
         Me.installButton.TabIndex = 0
         Me.installButton.Text = "Check AWS"
-        Me.installButton.UseVisualStyleBackColor = True
+        Me.installButton.UseVisualStyleBackColor = False
         '
         'Label1
         '
@@ -49,7 +52,7 @@ Partial Class installationWindow
         '
         'textOutput
         '
-        Me.textOutput.BackColor = System.Drawing.Color.DarkGray
+        Me.textOutput.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.textOutput.Location = New System.Drawing.Point(130, 134)
         Me.textOutput.Multiline = True
         Me.textOutput.Name = "textOutput"
@@ -58,22 +61,27 @@ Partial Class installationWindow
         '
         'checkInstallButton
         '
+        Me.checkInstallButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer), CType(CType(56, Byte), Integer))
+        Me.checkInstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.checkInstallButton.ForeColor = System.Drawing.Color.DarkGray
         Me.checkInstallButton.Location = New System.Drawing.Point(583, 159)
         Me.checkInstallButton.Name = "checkInstallButton"
         Me.checkInstallButton.Size = New System.Drawing.Size(101, 44)
         Me.checkInstallButton.TabIndex = 3
         Me.checkInstallButton.Text = "Check Python"
-        Me.checkInstallButton.UseVisualStyleBackColor = True
+        Me.checkInstallButton.UseVisualStyleBackColor = False
         '
         'installationWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(825, 417)
         Me.Controls.Add(Me.checkInstallButton)
         Me.Controls.Add(Me.textOutput)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.installButton)
+        Me.ForeColor = System.Drawing.Color.LightGray
         Me.Name = "installationWindow"
         Me.Text = "Tools Instalation"
         Me.ResumeLayout(False)
