@@ -21,41 +21,65 @@ Public Class BbAWSControl
         txtOutput.Clear()
 
         If profile = "" Or localPath = "" Or awsPath = "" Then
-            MsgBox("Invalid profile, local path or aws path", , "Error")
+            MessageBox.Show("Invalid profile, local path or aws path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
-            redFlag = True
-            txtOutput.AppendText("Processing... " & Environment.NewLine)
-            txtOutput.AppendText("Please Wait... " & Environment.NewLine)
+            If Directory.Exists(localPath) Then
+                redFlag = True
+                txtOutput.AppendText("Processing... " & Environment.NewLine)
+                txtOutput.AppendText("Please Wait... " & Environment.NewLine)
 
-            '## Downloads the list of items the S3 and places them in the lss3.txt file ##
-            If defaultSize = "" Then
-                createLss3(profile, awsPath)
-            Else
-                createLss3(profile, awsPath, defaultSize, defaultSize, 0, 0, True)
-            End If
-
-            '## checks if it is a local download or a S3 to S3 transfer ##
-            If awsFlag.CheckState = 1 Then
-                If destProfile = "" Or destinationAWS = "" Then
-                    redFlag = False
-                    MsgBox("Invalid destination profile, or destination aws path", , "Error")
-                    txtOutput.AppendText(Environment.NewLine & "The currnet configuration could not be saved..." & Environment.NewLine)
+                '## Downloads the list of items the S3 and places them in the lss3.txt file ##
+                If defaultSize = "" Then
+                    createLss3(profile, awsPath)
                 Else
-                    processCreation(profile, localPath, awsPath, destinationAWS, destProfile)
+                    createLss3(profile, awsPath, defaultSize, defaultSize, 0, 0, True)
+                End If
+
+                '## checks if it is a local download or a S3 to S3 transfer ##
+                If awsFlag.CheckState = 1 Then
+                    If destProfile = "" Or destinationAWS = "" Then
+                        redFlag = False
+                        MessageBox.Show("Invalid destination profile, or destination aws path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                        txtOutput.AppendText(Environment.NewLine & "The currnet configuration could not be saved..." & Environment.NewLine)
+                    Else
+                        processCreation(profile, localPath, awsPath, destinationAWS, destProfile)
+                        txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
+
+                        getList()
+
+                    End If
+                ElseIf awsFlag.CheckState = 0 Then
+                    processCreation(profile, localPath, awsPath)
+
                     txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
 
                     getList()
 
+                Else
+                    txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
                 End If
-            ElseIf awsFlag.CheckState = 0 Then
-                processCreation(profile, localPath, awsPath)
-
-                txtOutput.AppendText(Environment.NewLine & "Loading list... " & Environment.NewLine)
-
-                getList()
-
             Else
-                txtOutput.AppendText(Environment.NewLine & "Something wrong with aws flag..." & Environment.NewLine)
+                MessageBox.Show("Invalid or not accessible local path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+
+        End If
+        '## Using the total returned from getnumbers it translate the information in a more human readable format and prints it ##
+        If redFlag Then
+
+            Dim total As Double = getNumbers()
+
+            If total < Math.Pow(1024, 2) Then
+                total = total / 1024
+                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " KB.")
+            ElseIf total < Math.Pow(1024, 3) Then
+                total = total / Math.Pow(1024, 2)
+                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " MB.")
+            ElseIf total < Math.Pow(1024, 4) Then
+                total = total / Math.Pow(1024, 3)
+                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " GB.")
+            Else
+                total = total / Math.Pow(1024, 4)
+                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " TB.")
             End If
 
         End If
@@ -255,6 +279,17 @@ Get-Content -Path lss3.txt |
     '## Starts the download to local or transfer from S3 to S3 process. it uses the data in the namesfiles.txt created in the procesCreation method ##
     Private Sub Ejecutar_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
 
+        Dim processCounter As Double = 0
+        Dim totalFiles As Double
+        ProgressBar1.Minimum = 0
+        If awsFlag.CheckState = 1 Then
+            totalFiles = File.ReadLines("namesfiles.txt").Count() / 2
+            ProgressBar1.Maximum = totalFiles
+        ElseIf awsFlag.CheckState = 0 Then
+            totalFiles = File.ReadLines("namesfiles.txt").Count()
+            ProgressBar1.Maximum = totalFiles
+        End If
+
         If redFlag Then
             Dim nameFilesReader As New StreamReader("namesfiles.txt")
             Dim newLine As String = ""
@@ -278,6 +313,9 @@ Get-Content -Path lss3.txt |
 
                     For Each ps As PSObject In results
                         stringBuilder.AppendLine(ps.ToString)
+                        processCounter += 1
+                        ProgressBar1.Value = processCounter
+
                     Next
 
                     txtOutput.AppendText(stringBuilder.ToString())
@@ -305,38 +343,12 @@ Get-Content -Path lss3.txt |
         installationWindow.Show()
     End Sub
 
-    '## Using the total returned from getnumbers it translate the information in a more human readable format ##
-    Private Sub btnEstimate_Click(sender As Object, e As EventArgs) Handles btnEstimateSize.Click
-
-        If redFlag Then
-
-            Dim total As Double = getNumbers()
-
-            If total < Math.Pow(1024, 2) Then
-                total = total / 1024
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " KB.")
-            ElseIf total < Math.Pow(1024, 3) Then
-                total = total / Math.Pow(1024, 2)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " MB.")
-            ElseIf total < Math.Pow(1024, 4) Then
-                total = total / Math.Pow(1024, 3)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " GB.")
-            Else
-                total = total / Math.Pow(1024, 4)
-                txtOutput.AppendText(Environment.NewLine & txtOutput.Text & Environment.NewLine & "The total size of this package is: " & total.ToString & " TB.")
-            End If
-        Else
-            MessageBox.Show("Execute Get List first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-
-    End Sub
-
     '## gets all the data from the origin S3. Controls the inspect S3 button ##
     Private Sub btnGetS3_Click(sender As Object, e As EventArgs) Handles btnGetS3.Click
 
         Dim profile = txtInputProfile.Text()
         Dim awsPath = txtAwsPath.Text()
-
+        txtOutput.Clear()
         If String.IsNullOrEmpty(profile) Or String.IsNullOrEmpty(awsPath) Then
             MessageBox.Show("Profile and AWS source path are required", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         Else
@@ -409,4 +421,5 @@ Get-Content -Path lss3.txt |
             txtDestinationProfile.BackColor = Color.FromArgb(209, 209, 209)
         End If
     End Sub
+
 End Class
