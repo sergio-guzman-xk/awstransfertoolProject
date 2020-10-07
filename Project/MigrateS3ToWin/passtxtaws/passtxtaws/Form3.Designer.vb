@@ -82,7 +82,9 @@ Partial Class installationWindow
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.installButton)
         Me.ForeColor = System.Drawing.Color.LightGray
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "installationWindow"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Tools Instalation"
         Me.ResumeLayout(False)
         Me.PerformLayout()

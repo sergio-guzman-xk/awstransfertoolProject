@@ -124,7 +124,9 @@ Partial Class configPanel
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.accessKeyTxt)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "configPanel"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "AWS Profile Configuration"
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -61,33 +61,44 @@ region=us-east-1"
     End Sub
     '## Writes on the aws credentials file ##
     Private Sub writeOnFile(profile As String, awsPath As String, inputString As String, configInput As String)
-        Dim readerCredentials As New StreamReader("" & awsPath & "\.aws\credentials", utf8WithoutBom)
-        Dim newLine As String = ""
-        Dim find As Boolean = False
 
-        Do
-            newLine = readerCredentials.ReadLine()
-            If Not newLine Is Nothing Then
-                If newLine = "[" & profile & "]" Then
-                    MessageBox.Show("Profile name already exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    readerCredentials.Close()
-                    find = True
-                    Exit Do
-                End If
-            End If
-
-        Loop Until newLine Is Nothing
-
+        Dim find = getSearchOnFile(profile)
 
         If find = False Then
-            readerCredentials.Close()
             My.Computer.FileSystem.WriteAllText("" & awsPath & "\.aws\credentials", inputString, True, utf8WithoutBom)
             My.Computer.FileSystem.WriteAllText("" & awsPath & "\.aws\config", configInput, True, utf8WithoutBom)
             MsgBox("Profile Created", , "Profile")
             Me.Close()
             BbAWSControl.Show()
+        Else
+            MessageBox.Show("Profile name already exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
+
+    Public Function getSearchOnFile(profile As String)
+        Dim awsPath = Environment.GetEnvironmentVariable("USERPROFILE")
+        Dim found As Boolean = searchOnFile(profile, awsPath)
+        Return found
+    End Function
+
+    Private Function searchOnFile(profile As String, awsPath As String)
+        Dim readerCredentials As New StreamReader("" & awsPath & "\.aws\config", utf8WithoutBom)
+        Dim newLine As String = ""
+
+        Do
+            newLine = readerCredentials.ReadLine()
+            If Not newLine Is Nothing Then
+                If newLine = "[profile " & profile & "]" Then
+                    readerCredentials.Close()
+                    Return True
+                    Exit Do
+                End If
+            End If
+
+        Loop Until newLine Is Nothing
+        readerCredentials.Close()
+        Return False
+    End Function
 
     Private Sub Form3_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         '## Shows the "are you sure" box at closing
